@@ -44,7 +44,9 @@ func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 }
 
 func (m *AnyOrderedMap) Copy() *AnyOrderedMap {
-	return &AnyOrderedMap{orderedMap: m.orderedMap.Copy()}
+	return &AnyOrderedMap{
+		orderedMap: m.orderedMap.Copy(),
+	}
 }
 
 func unmarshalAnyOrderedMap(decoder *json.Decoder, m *AnyOrderedMap) error {

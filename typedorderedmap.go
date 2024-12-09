@@ -68,5 +68,7 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 }
 
 func (m *TypedOrderedMap[V]) Copy() *TypedOrderedMap[V] {
-	return &TypedOrderedMap[V]{orderedMap: m.orderedMap.Copy()}
+	return &TypedOrderedMap[V]{
+		orderedMap: m.orderedMap.Copy(),
+	}
 }
