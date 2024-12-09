@@ -7,21 +7,21 @@ import (
 	"strings"
 )
 
-type TypedOrderedMap[K comparable, V any] struct {
-	*orderedMap[K, V]
+type TypedOrderedMap[V any] struct {
+	*orderedMap[V]
 }
 
-func NewTypedOrderedMap[K comparable, V any]() *TypedOrderedMap[K, V] {
-	return &TypedOrderedMap[K, V]{
-		orderedMap: newOrderedMap[K, V](),
+func NewTypedOrderedMap[V any]() *TypedOrderedMap[V] {
+	return &TypedOrderedMap[V]{
+		orderedMap: newOrderedMap[V](),
 	}
 }
 
-func (m *TypedOrderedMap[K, V]) SetEscapeHTML(on bool) {
+func (m *TypedOrderedMap[V]) SetEscapeHTML(on bool) {
 	m.escapeHTML = on
 }
 
-func (m *TypedOrderedMap[K, V]) String() string {
+func (m *TypedOrderedMap[V]) String() string {
 	builder := strings.Builder{}
 
 	builder.WriteString("{")
@@ -40,7 +40,7 @@ func (m *TypedOrderedMap[K, V]) String() string {
 	return builder.String()
 }
 
-func (m *TypedOrderedMap[K, V]) MarshalJSON() ([]byte, error) {
+func (m *TypedOrderedMap[V]) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	buf.WriteByte('{')
 	encoder := json.NewEncoder(&buf)
@@ -69,9 +69,9 @@ func (m *TypedOrderedMap[K, V]) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (m *TypedOrderedMap[K, V]) UnmarshalJSON(b []byte) error {
+func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 	if m.orderedMap == nil {
-		m.orderedMap = newOrderedMap[K, V]()
+		m.orderedMap = newOrderedMap[V]()
 	}
 
 	decoder := json.NewDecoder(bytes.NewReader(b))
@@ -99,7 +99,7 @@ func (m *TypedOrderedMap[K, V]) UnmarshalJSON(b []byte) error {
 			return nil
 		}
 
-		key, ok := token.(K)
+		key, ok := token.(string)
 
 		if !ok {
 			return fmt.Errorf("unexpected key type: %T", token)

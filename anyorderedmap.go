@@ -7,12 +7,12 @@ import (
 )
 
 type AnyOrderedMap struct {
-	*orderedMap[string, any]
+	*orderedMap[any]
 }
 
 func NewAnyOrderedMap() *AnyOrderedMap {
 	return &AnyOrderedMap{
-		orderedMap: newOrderedMap[string, any](),
+		orderedMap: newOrderedMap[any](),
 	}
 }
 
@@ -47,7 +47,7 @@ func (m *AnyOrderedMap) MarshalJSON() ([]byte, error) {
 
 func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 	if m.orderedMap == nil {
-		m.orderedMap = newOrderedMap[string, any]()
+		m.orderedMap = newOrderedMap[any]()
 	}
 
 	decoder := json.NewDecoder(bytes.NewReader(b))

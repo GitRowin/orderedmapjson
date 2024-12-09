@@ -6,23 +6,23 @@ import (
 	"strings"
 )
 
-type orderedMap[K comparable, V any] struct {
-	*orderedmap.OrderedMap[K, V]
+type orderedMap[V any] struct {
+	*orderedmap.OrderedMap[string, V]
 	escapeHTML bool
 }
 
-func newOrderedMap[K comparable, V any]() *orderedMap[K, V] {
-	return &orderedMap[K, V]{
-		OrderedMap: orderedmap.NewOrderedMap[K, V](),
+func newOrderedMap[V any]() *orderedMap[V] {
+	return &orderedMap[V]{
+		OrderedMap: orderedmap.NewOrderedMap[string, V](),
 		escapeHTML: true, // Default to true for consistency with encoding/json
 	}
 }
 
-func (m *orderedMap[K, V]) SetEscapeHTML(on bool) {
+func (m *orderedMap[V]) SetEscapeHTML(on bool) {
 	m.escapeHTML = on
 }
 
-func (m *orderedMap[K, V]) String() string {
+func (m *orderedMap[V]) String() string {
 	builder := strings.Builder{}
 
 	builder.WriteString("{")

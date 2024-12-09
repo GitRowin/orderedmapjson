@@ -9,7 +9,7 @@ import (
 func TestTypedOrderedMapStringInt(t *testing.T) {
 	const input = `{"nine":9,"eight":8,"seven":7,"six":6,"five":5,"four":4,"three":3,"two":2,"one":1,"zero":0}`
 
-	m := NewTypedOrderedMap[string, int]()
+	m := NewTypedOrderedMap[int]()
 
 	if err := json.Unmarshal([]byte(input), m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -33,7 +33,7 @@ func TestTypedOrderedMapStringInt(t *testing.T) {
 func TestTypedOrderedMapStringOrderedMapStringString(t *testing.T) {
 	const input = `{"one":{"foo":"bar"},"two":{"foo":"bar"},"three":{"foo":"bar"}}`
 
-	m := NewTypedOrderedMap[string, *TypedOrderedMap[string, string]]()
+	m := NewTypedOrderedMap[*TypedOrderedMap[string]]()
 
 	if err := json.Unmarshal([]byte(input), m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
