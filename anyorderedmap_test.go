@@ -54,6 +54,6 @@ func TestAnyOrderedMapCopy(t *testing.T) {
 	mm := m.Copy()
 
 	if mm.String() != m.String() {
-		t.Fatalf("expected %s, got %s", mm.String(), m.String())
+		t.Fatalf("expected %s, got %s", m.String(), mm.String())
 	}
 }
