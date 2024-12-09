@@ -46,6 +46,10 @@ func (m *AnyOrderedMap) MarshalJSON() ([]byte, error) {
 }
 
 func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
+	if m.orderedMap == nil {
+		m.orderedMap = newOrderedMap[string, any]()
+	}
+
 	decoder := json.NewDecoder(bytes.NewReader(b))
 
 	// Skip '{'
