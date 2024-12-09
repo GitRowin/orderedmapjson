@@ -12,7 +12,8 @@ go get github.com/GitRowin/orderedmapjson
 
 # Usage
 
-The library provides two types: `TypedOrderedMap` and `AnyOrderedMap`. It also provides an `UnmarshalArrayWithAnyOrderedMap` function.
+The library provides two types: `TypedOrderedMap` and `AnyOrderedMap`. It also provides an
+`UnmarshalArrayWithAnyOrderedMap` function.
 
 ## TypedOrderedMap
 
@@ -39,8 +40,8 @@ fmt.Println(string(b)) // Output: {"q":1,"w":2,"e":3,"r":4,"t":5,"y":6}
 
 ## AnyOrderedMap
 
-AnyOrderedMap is similar to `TypedOrderedMap[any]`, with one key difference: it unmarshals nested
-objects as `AnyOrderedMap[any]` rather than `map[string]any`. This ensures that the order of nested objects is preserved
+AnyOrderedMap is similar to `TypedOrderedMap[any]`, with one key difference: it unmarshals JSON objects at any level as
+`AnyOrderedMap[any]` rather than `map[string]any`. This ensures that the order of nested objects is preserved
 too.
 
 ```go
@@ -62,7 +63,8 @@ if baz, ok := m.Get("baz"); ok {
 
 ## UnmarshalArrayWithAnyOrderedMap
 
-UnmarshalArrayWithAnyOrderedMap unmarshals a JSON array, converting all JSON objects at any level into `AnyOrderedMap` instead of `map[string]any`.
+UnmarshalArrayWithAnyOrderedMap unmarshals a JSON array. Like AnyOrderedMap, it unmarshals JSON objects at any level as
+`AnyOrderedMap[any]` rather than `map[string]any`.
 
 ```go
 const input = `["foo",1,{"3":"3","1":"1","2":"2"}]`
