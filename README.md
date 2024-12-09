@@ -12,7 +12,7 @@ go get github.com/GitRowin/orderedmapjson
 
 # Usage
 
-The library provides two types: `TypedOrderedMap` and `AnyOrderedMap`.
+The library provides two types: `TypedOrderedMap` and `AnyOrderedMap`. It also provides a `UnmarshalArrayWithAnyOrderedMap` function.
 
 ## TypedOrderedMap
 
@@ -58,4 +58,20 @@ if obj, ok := m.Get("obj"); ok {
 if baz, ok := m.Get("baz"); ok {
     fmt.Println(baz.([]any)[2]) // Output: 3
 }
+```
+
+## UnmarshalArrayWithAnyOrderedMap
+
+UnmarshalArrayWithAnyOrderedMap unmarshals a JSON array. If an object is found inside the array, it will be unmarshalled as an `AnyOrderedMap` instead of a `map[string]any`.
+
+```go
+const input = `["foo",1,{"3":"3","1":"1","2":"2"}]`
+
+values, err := orderedmapjson.UnmarshalArrayWithAnyOrderedMap([]byte(input))
+
+if err != nil {
+    panic(err)
+}
+
+fmt.Println(values[2]) // Output: {3:3,1:1,2:2}
 ```
