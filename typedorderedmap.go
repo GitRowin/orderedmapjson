@@ -8,12 +8,12 @@ import (
 )
 
 type TypedOrderedMap[K comparable, V any] struct {
-	*OrderedMap[K, V]
+	*orderedMap[K, V]
 }
 
 func NewTypedOrderedMap[K comparable, V any]() *TypedOrderedMap[K, V] {
 	return &TypedOrderedMap[K, V]{
-		OrderedMap: newOrderedMap[K, V](),
+		orderedMap: newOrderedMap[K, V](),
 	}
 }
 
@@ -70,8 +70,8 @@ func (m *TypedOrderedMap[K, V]) MarshalJSON() ([]byte, error) {
 }
 
 func (m *TypedOrderedMap[K, V]) UnmarshalJSON(b []byte) error {
-	if m.OrderedMap == nil {
-		m.OrderedMap = newOrderedMap[K, V]()
+	if m.orderedMap == nil {
+		m.orderedMap = newOrderedMap[K, V]()
 	}
 
 	decoder := json.NewDecoder(bytes.NewReader(b))

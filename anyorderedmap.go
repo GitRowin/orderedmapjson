@@ -7,12 +7,12 @@ import (
 )
 
 type AnyOrderedMap struct {
-	*OrderedMap[string, any]
+	*orderedMap[string, any]
 }
 
 func NewAnyOrderedMap() *AnyOrderedMap {
 	return &AnyOrderedMap{
-		OrderedMap: newOrderedMap[string, any](),
+		orderedMap: newOrderedMap[string, any](),
 	}
 }
 
