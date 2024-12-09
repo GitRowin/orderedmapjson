@@ -119,3 +119,20 @@ func unmarshalAnyOrderedMapArray(decoder *json.Decoder) ([]any, error) {
 		}
 	}
 }
+
+func UnmarshalArrayWithAnyOrderedMap(b []byte) ([]any, error) {
+	decoder := json.NewDecoder(bytes.NewReader(b))
+
+	// Skip '['
+	token, err := decoder.Token()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if token != json.Delim('[') {
+		return nil, fmt.Errorf("expected '[' but got %v", token)
+	}
+
+	return unmarshalAnyOrderedMapArray(decoder)
+}

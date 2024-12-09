@@ -39,7 +39,7 @@ fmt.Println(string(b)) // Output: {"q":1,"w":2,"e":3,"r":4,"t":5,"y":6}
 
 ## AnyOrderedMap
 
-AnyOrderedMap is similar to `TypedOrderedMap[any]`, with one key difference: it unmarshalls nested
+AnyOrderedMap is similar to `TypedOrderedMap[any]`, with one key difference: it unmarshals nested
 objects as `AnyOrderedMap[any]` rather than `map[string]any`. This ensures that the order of nested objects is preserved
 too.
 
