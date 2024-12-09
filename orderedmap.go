@@ -78,3 +78,14 @@ func (m *orderedMap[V]) String() string {
 	builder.WriteString("}")
 	return builder.String()
 }
+
+func (m *orderedMap[V]) Copy() *orderedMap[V] {
+	mm := newOrderedMapWithCapacity[V](m.Len())
+	mm.SetEscapeHTML(m.escapeHTML)
+
+	for key, value := range m.AllFromFront() {
+		mm.Set(key, value)
+	}
+
+	return mm
+}
