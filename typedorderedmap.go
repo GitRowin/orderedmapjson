@@ -16,6 +16,12 @@ func NewTypedOrderedMap[V any]() *TypedOrderedMap[V] {
 	}
 }
 
+func NewTypedOrderedMapWithCapacity[V any](capacity int) *TypedOrderedMap[V] {
+	return &TypedOrderedMap[V]{
+		orderedMap: newOrderedMapWithCapacity[V](capacity),
+	}
+}
+
 func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 	if m.orderedMap == nil {
 		m.orderedMap = newOrderedMap[V]()
@@ -59,4 +65,14 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 
 		m.Set(key, value)
 	}
+}
+
+func (m *TypedOrderedMap[V]) Copy() *TypedOrderedMap[V] {
+	mm := NewTypedOrderedMapWithCapacity[V](m.Len())
+
+	for key, value := range m.AllFromFront() {
+		mm.Set(key, value)
+	}
+
+	return mm
 }

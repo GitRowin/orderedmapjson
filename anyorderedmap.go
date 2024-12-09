@@ -16,6 +16,12 @@ func NewAnyOrderedMap() *AnyOrderedMap {
 	}
 }
 
+func NewAnyOrderedMapWithCapacity(capacity int) *AnyOrderedMap {
+	return &AnyOrderedMap{
+		orderedMap: newOrderedMapWithCapacity[any](capacity),
+	}
+}
+
 func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 	if m.orderedMap == nil {
 		m.orderedMap = newOrderedMap[any]()
@@ -35,6 +41,16 @@ func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 	}
 
 	return unmarshalAnyOrderedMap(decoder, m)
+}
+
+func (m *AnyOrderedMap) Copy() *AnyOrderedMap {
+	mm := NewAnyOrderedMapWithCapacity(m.Len())
+
+	for key, value := range m.AllFromFront() {
+		mm.Set(key, value)
+	}
+
+	return mm
 }
 
 func unmarshalAnyOrderedMap(decoder *json.Decoder, m *AnyOrderedMap) error {

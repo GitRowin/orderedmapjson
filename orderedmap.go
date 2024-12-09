@@ -20,6 +20,13 @@ func newOrderedMap[V any]() *orderedMap[V] {
 	}
 }
 
+func newOrderedMapWithCapacity[V any](capacity int) *orderedMap[V] {
+	return &orderedMap[V]{
+		OrderedMap: orderedmap.NewOrderedMapWithCapacity[string, V](capacity),
+		escapeHTML: true, // Default to true for consistency with encoding/json
+	}
+}
+
 func (m *orderedMap[V]) SetEscapeHTML(on bool) {
 	m.escapeHTML = on
 }

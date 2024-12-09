@@ -44,3 +44,16 @@ func TestUnmarshalArrayWithAnyOrderedMap(t *testing.T) {
 		t.Fatalf("expected %s, got %s", input, output)
 	}
 }
+
+func TestAnyOrderedMapCopy(t *testing.T) {
+	m := NewAnyOrderedMap()
+	m.Set("foo", "bar")
+	m.Set("123", true)
+	m.Set("abc", nil)
+
+	mm := m.Copy()
+
+	if mm.String() != m.String() {
+		t.Fatalf("expected %s, got %s", mm.String(), m.String())
+	}
+}

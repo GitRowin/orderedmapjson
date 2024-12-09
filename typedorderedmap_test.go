@@ -80,3 +80,16 @@ func TestTypedOrderedMapIntWrongType(t *testing.T) {
 		t.Fatal("expected error")
 	}
 }
+
+func TestTypedOrderedMapCopy(t *testing.T) {
+	m := NewTypedOrderedMap[string]()
+	m.Set("foo", "bar")
+	m.Set("123", "true")
+	m.Set("abc", "nil")
+
+	mm := m.Copy()
+
+	if mm.String() != m.String() {
+		t.Fatalf("expected %s, got %s", mm.String(), m.String())
+	}
+}
