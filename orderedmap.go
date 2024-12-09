@@ -1,6 +1,8 @@
 package orderedmapjson
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/elliotchance/orderedmap/v3"
 	"strings"
@@ -20,6 +22,35 @@ func newOrderedMap[V any]() *orderedMap[V] {
 
 func (m *orderedMap[V]) SetEscapeHTML(on bool) {
 	m.escapeHTML = on
+}
+
+func (m *orderedMap[V]) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	buf.WriteByte('{')
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(m.escapeHTML)
+
+	index := 0
+	for k, v := range m.AllFromFront() {
+		if index > 0 {
+			buf.WriteByte(',')
+		}
+
+		if err := encoder.Encode(k); err != nil {
+			return nil, err
+		}
+
+		buf.WriteByte(':')
+
+		if err := encoder.Encode(v); err != nil {
+			return nil, err
+		}
+
+		index++
+	}
+
+	buf.WriteByte('}')
+	return buf.Bytes(), nil
 }
 
 func (m *orderedMap[V]) String() string {

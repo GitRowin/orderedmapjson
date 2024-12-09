@@ -16,35 +16,6 @@ func NewAnyOrderedMap() *AnyOrderedMap {
 	}
 }
 
-func (m *AnyOrderedMap) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	buf.WriteByte('{')
-	encoder := json.NewEncoder(&buf)
-	encoder.SetEscapeHTML(m.escapeHTML)
-
-	index := 0
-	for k, v := range m.AllFromFront() {
-		if index > 0 {
-			buf.WriteByte(',')
-		}
-
-		if err := encoder.Encode(k); err != nil {
-			return nil, err
-		}
-
-		buf.WriteByte(':')
-
-		if err := encoder.Encode(v); err != nil {
-			return nil, err
-		}
-
-		index++
-	}
-
-	buf.WriteByte('}')
-	return buf.Bytes(), nil
-}
-
 func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 	if m.orderedMap == nil {
 		m.orderedMap = newOrderedMap[any]()
