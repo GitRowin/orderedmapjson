@@ -80,12 +80,8 @@ func (m *orderedMap[V]) String() string {
 }
 
 func (m *orderedMap[V]) Copy() *orderedMap[V] {
-	mm := newOrderedMapWithCapacity[V](m.Len())
-	mm.SetEscapeHTML(m.escapeHTML)
-
-	for key, value := range m.AllFromFront() {
-		mm.Set(key, value)
+	return &orderedMap[V]{
+		OrderedMap: m.OrderedMap.Copy(),
+		escapeHTML: m.escapeHTML,
 	}
-
-	return mm
 }
