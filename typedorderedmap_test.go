@@ -8,9 +8,8 @@ import (
 func TestTypedOrderedMapInt(t *testing.T) {
 	const input = `{"nine":9,"eight":8,"seven":7,"six":6,"five":5,"four":4,"three":3,"two":2,"one":1,"zero":0}`
 
-	m := NewTypedOrderedMap[int]()
-
-	if err := json.Unmarshal([]byte(input), m); err != nil {
+	var m *TypedOrderedMap[int]
+	if err := json.Unmarshal([]byte(input), &m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -30,9 +29,8 @@ func TestTypedOrderedMapInt(t *testing.T) {
 func TestTypedOrderedMapOrderedMapString(t *testing.T) {
 	const input = `{"one":{"foo":"bar"},"two":{"foo":"bar"},"three":{"foo":"bar"}}`
 
-	m := NewTypedOrderedMap[*TypedOrderedMap[string]]()
-
-	if err := json.Unmarshal([]byte(input), m); err != nil {
+	var m *TypedOrderedMap[*TypedOrderedMap[string]]
+	if err := json.Unmarshal([]byte(input), &m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -52,9 +50,8 @@ func TestTypedOrderedMapOrderedMapString(t *testing.T) {
 func TestTypedOrderedMapOrderedMapInt(t *testing.T) {
 	const input = `{"one":{"foo":1},"two":{"foo":2},"three":{"foo":3}}`
 
-	m := NewTypedOrderedMap[*TypedOrderedMap[int]]()
-
-	if err := json.Unmarshal([]byte(input), m); err != nil {
+	var m *TypedOrderedMap[*TypedOrderedMap[int]]
+	if err := json.Unmarshal([]byte(input), &m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -74,8 +71,7 @@ func TestTypedOrderedMapOrderedMapInt(t *testing.T) {
 func TestTypedOrderedMapIntWrongType(t *testing.T) {
 	const input = `{"one":1,"two":2,"three":"3"}`
 
-	m := NewTypedOrderedMap[int]()
-
+	var m *TypedOrderedMap[int]
 	if err := json.Unmarshal([]byte(input), m); err == nil {
 		t.Fatal("expected error")
 	}

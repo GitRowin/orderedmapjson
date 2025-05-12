@@ -8,9 +8,8 @@ import (
 func TestAnyOrderedMap(t *testing.T) {
 	const input = `{"foo":"bar","123":true,"abc":null,"_obj":{"foo":"bar"},"_array":[{"b":"b","a":"a","0":null,"123":{"q":"","w":"","e":"","r":"","t":"","y":""}}],"q":"","w":"","e":"","r":"","t":"","y":""}`
 
-	m := NewAnyOrderedMap()
-
-	if err := json.Unmarshal([]byte(input), m); err != nil {
+	var m *AnyOrderedMap
+	if err := json.Unmarshal([]byte(input), &m); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -27,10 +26,13 @@ func TestAnyOrderedMap(t *testing.T) {
 	}
 }
 
-func TestUnmarshalArrayWithAnyOrderedMap(t *testing.T) {
+func TestAnyOrderedMapSlice(t *testing.T) {
 	const input = `[{"c":"c","a":"a","b":"b"},"test",123,{"3":"3","2":"2","1":"1"}]`
 
-	values, err := UnmarshalArrayWithAnyOrderedMap([]byte(input))
+	var values AnyOrderedMapSlice
+	if err := json.Unmarshal([]byte(input), &values); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 
 	data, err := json.Marshal(values)
 
