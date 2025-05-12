@@ -132,19 +132,28 @@ func unmarshalAnyOrderedMapArray(decoder *json.Decoder) ([]any, error) {
 	}
 }
 
-func UnmarshalArrayWithAnyOrderedMap(b []byte) ([]any, error) {
+type AnyOrderedMapSlice []any
+
+func (s *AnyOrderedMapSlice) UnmarshalJSON(b []byte) error {
 	decoder := json.NewDecoder(bytes.NewReader(b))
 
 	// Skip '['
 	token, err := decoder.Token()
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if token != json.Delim('[') {
-		return nil, fmt.Errorf("expected '[' but got %v", token)
+		return fmt.Errorf("expected '[' but got %v", token)
 	}
 
-	return unmarshalAnyOrderedMapArray(decoder)
+	values, err := unmarshalAnyOrderedMapArray(decoder)
+
+	if err != nil {
+		return err
+	}
+
+	*s = values
+	return nil
 }
