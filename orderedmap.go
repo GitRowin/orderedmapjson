@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/elliotchance/orderedmap/v3"
 	"strings"
+
+	"github.com/elliotchance/orderedmap/v3"
 )
 
 type orderedMap[V any] struct {
