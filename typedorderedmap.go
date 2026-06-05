@@ -6,16 +6,21 @@ import (
 	"fmt"
 )
 
+// TypedOrderedMap is a JSON-marshallable ordered map with string keys and values of type V.
+// The zero value is not usable, except as an unmarshalling target:
+// use NewTypedOrderedMap or NewTypedOrderedMapWithCapacity.
 type TypedOrderedMap[V any] struct {
 	*orderedMap[V]
 }
 
+// NewTypedOrderedMap returns an initialized TypedOrderedMap.
 func NewTypedOrderedMap[V any]() *TypedOrderedMap[V] {
 	return &TypedOrderedMap[V]{
 		orderedMap: newOrderedMap[V](),
 	}
 }
 
+// NewTypedOrderedMapWithCapacity returns an initialized TypedOrderedMap with the given capacity.
 func NewTypedOrderedMapWithCapacity[V any](capacity int) *TypedOrderedMap[V] {
 	return &TypedOrderedMap[V]{
 		orderedMap: newOrderedMapWithCapacity[V](capacity),
@@ -23,11 +28,24 @@ func NewTypedOrderedMapWithCapacity[V any](capacity int) *TypedOrderedMap[V] {
 }
 
 func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
+	// Like encoding/json does for maps, unmarshalling null clears the map
+	if bytes.Equal(b, jsonNull) {
+		if m.orderedMap != nil {
+			m.clear()
+		}
+
+		return nil
+	}
+
 	if m.orderedMap == nil {
 		m.orderedMap = newOrderedMap[V]()
 	}
 
 	decoder := json.NewDecoder(bytes.NewReader(b))
+
+	if m.useNumber {
+		decoder.UseNumber()
+	}
 
 	// Skip '{'
 	token, err := decoder.Token()
@@ -49,7 +67,7 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 
 		// Reached end of map
 		if token == json.Delim('}') {
-			return nil
+			break
 		}
 
 		key, ok := token.(string)
@@ -65,8 +83,12 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 
 		m.Set(key, value)
 	}
+
+	return ensureNoTrailingData(decoder)
 }
 
+// Copy returns a shallow copy of the map: the values are copied as-is,
+// so nested maps and slices are shared between the original and the copy.
 func (m *TypedOrderedMap[V]) Copy() *TypedOrderedMap[V] {
 	return &TypedOrderedMap[V]{
 		orderedMap: m.orderedMap.Copy(),
