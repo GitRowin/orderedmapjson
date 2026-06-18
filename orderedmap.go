@@ -19,14 +19,14 @@ type orderedMap[V any] struct {
 func newOrderedMap[V any]() *orderedMap[V] {
 	return &orderedMap[V]{
 		OrderedMap: orderedmap.NewOrderedMap[string, V](),
-		escapeHTML: true, // Default to true for consistency with encoding/json
+		escapeHTML: true, // Default to true for consistency with encoding/json.
 	}
 }
 
 func newOrderedMapWithCapacity[V any](capacity int) *orderedMap[V] {
 	return &orderedMap[V]{
 		OrderedMap: orderedmap.NewOrderedMapWithCapacity[string, V](capacity),
-		escapeHTML: true, // Default to true for consistency with encoding/json
+		escapeHTML: true, // Default to true for consistency with encoding/json.
 	}
 }
 
@@ -50,9 +50,10 @@ func (m *orderedMap[V]) clear() {
 
 func (m *orderedMap[V]) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
-	buf.WriteByte('{')
 	encoder := json.NewEncoder(&buf)
 	encoder.SetEscapeHTML(m.escapeHTML)
+
+	buf.WriteByte('{')
 
 	index := 0
 	for k, v := range m.AllFromFront() {
@@ -64,7 +65,7 @@ func (m *orderedMap[V]) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 
-		// Remove the newline added by Encode
+		// Remove the newline added by Encode.
 		buf.Truncate(buf.Len() - 1)
 
 		buf.WriteByte(':')
@@ -73,7 +74,7 @@ func (m *orderedMap[V]) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 
-		// Remove the newline added by Encode
+		// Remove the newline added by Encode.
 		buf.Truncate(buf.Len() - 1)
 
 		index++
@@ -84,7 +85,7 @@ func (m *orderedMap[V]) MarshalJSON() ([]byte, error) {
 }
 
 func (m *orderedMap[V]) String() string {
-	builder := strings.Builder{}
+	builder := &strings.Builder{}
 
 	builder.WriteString("{")
 
@@ -94,7 +95,7 @@ func (m *orderedMap[V]) String() string {
 			builder.WriteString(",")
 		}
 
-		builder.WriteString(fmt.Sprintf("%v:%s", k, formatValue(v)))
+		fmt.Fprintf(builder, "%v:%s", k, formatValue(v))
 		index++
 	}
 

@@ -4,6 +4,8 @@ orderedmapjson is a package that extends the [orderedmap](https://github.com/ell
 
 # Installation
 
+Requires Go 1.23 or later.
+
 ```
 go get github.com/GitRowin/orderedmapjson
 ```
@@ -11,6 +13,8 @@ go get github.com/GitRowin/orderedmapjson
 # Usage
 
 The library provides three types: `TypedOrderedMap`, `AnyOrderedMap` and `AnyOrderedMapSlice`.
+
+`TypedOrderedMap` and `AnyOrderedMap` embed [orderedmap](https://github.com/elliotchance/orderedmap)'s `OrderedMap`, so all of its methods (`Get`, `Set`, `Delete`, `Len`, `AllFromFront`, etc.) are available directly on them. Each provides two constructors, a default one and one that takes an initial capacity: `NewTypedOrderedMap[V]()` / `NewTypedOrderedMapWithCapacity[V](capacity)` and `NewAnyOrderedMap()` / `NewAnyOrderedMapWithCapacity(capacity)`.
 
 ## TypedOrderedMap
 
@@ -133,3 +137,7 @@ fmt.Print(buf.String()) // Output: {"foo":"<bar>"}
 - Like `encoding/json`, duplicate keys are permitted and the last value wins. The key keeps the position of its first occurrence.
 - Like `encoding/json`, a nil `Values` field is marshalled as `null` rather than `[]`.
 - Unmarshalling `null` clears the map (or sets `AnyOrderedMapSlice`'s `Values` to nil), consistent with how `encoding/json` unmarshals `null` into maps and slices. Settings are kept.
+
+# License
+
+[MIT](LICENSE)

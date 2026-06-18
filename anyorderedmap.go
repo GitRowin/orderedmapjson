@@ -62,7 +62,7 @@ func setEscapeHTML(value any, on bool) {
 }
 
 func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
-	// Like encoding/json does for maps, unmarshalling null clears the map
+	// Decode null as an empty map, so null in a non-pointer field doesn't error.
 	if bytes.Equal(b, jsonNull) {
 		if m.orderedMap != nil {
 			m.clear()
@@ -81,7 +81,7 @@ func (m *AnyOrderedMap) UnmarshalJSON(b []byte) error {
 		decoder.UseNumber()
 	}
 
-	// Skip '{'
+	// Skip '{'.
 	token, err := decoder.Token()
 
 	if err != nil {
@@ -115,7 +115,7 @@ func unmarshalAnyOrderedMap(decoder *json.Decoder, m *AnyOrderedMap) error {
 			return err
 		}
 
-		// Reached end of map
+		// Reached end of map.
 		if token == json.Delim('}') {
 			return nil
 		}
@@ -165,7 +165,7 @@ func unmarshalAnyOrderedMapArray(decoder *json.Decoder, escapeHTML, useNumber bo
 		}
 
 		switch token {
-		// Reached end of array
+		// Reached end of array.
 		case json.Delim(']'):
 			return values, nil
 		case json.Delim('{'):
@@ -195,7 +195,7 @@ func unmarshalAnyOrderedMapArray(decoder *json.Decoder, escapeHTML, useNumber bo
 type AnyOrderedMapSlice struct {
 	Values []any
 
-	noEscapeHTML bool // Inverted so that the zero value matches encoding/json's default
+	noEscapeHTML bool // Inverted so that the zero value matches encoding/json's default.
 	useNumber    bool
 }
 
@@ -218,7 +218,7 @@ func (s *AnyOrderedMapSlice) SetUseNumber(on bool) {
 }
 
 func (s AnyOrderedMapSlice) MarshalJSON() ([]byte, error) {
-	// Like encoding/json does for nil slices, marshal nil Values as null
+	// Like encoding/json does for nil slices, marshal nil Values as null.
 	if s.Values == nil {
 		return []byte("null"), nil
 	}
@@ -237,7 +237,7 @@ func (s AnyOrderedMapSlice) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 
-		// Remove the newline added by Encode
+		// Remove the newline added by Encode.
 		buf.Truncate(buf.Len() - 1)
 	}
 
@@ -246,7 +246,7 @@ func (s AnyOrderedMapSlice) MarshalJSON() ([]byte, error) {
 }
 
 func (s *AnyOrderedMapSlice) UnmarshalJSON(b []byte) error {
-	// Like encoding/json does for slices, unmarshalling null sets the slice to nil
+	// Like encoding/json does for slices, unmarshalling null sets the slice to nil.
 	if bytes.Equal(b, jsonNull) {
 		s.Values = nil
 		return nil
@@ -258,7 +258,7 @@ func (s *AnyOrderedMapSlice) UnmarshalJSON(b []byte) error {
 		decoder.UseNumber()
 	}
 
-	// Skip '['
+	// Skip '['.
 	token, err := decoder.Token()
 
 	if err != nil {

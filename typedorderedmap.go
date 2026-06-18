@@ -28,7 +28,7 @@ func NewTypedOrderedMapWithCapacity[V any](capacity int) *TypedOrderedMap[V] {
 }
 
 func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
-	// Like encoding/json does for maps, unmarshalling null clears the map
+	// Decode null as an empty map, so null in a non-pointer field doesn't error.
 	if bytes.Equal(b, jsonNull) {
 		if m.orderedMap != nil {
 			m.clear()
@@ -47,7 +47,7 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 		decoder.UseNumber()
 	}
 
-	// Skip '{'
+	// Skip '{'.
 	token, err := decoder.Token()
 
 	if err != nil {
@@ -65,7 +65,7 @@ func (m *TypedOrderedMap[V]) UnmarshalJSON(b []byte) error {
 			return err
 		}
 
-		// Reached end of map
+		// Reached end of map.
 		if token == json.Delim('}') {
 			break
 		}
